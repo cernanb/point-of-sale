@@ -30,4 +30,18 @@ module.exports = ItemController
         })
     })
 
+    .get('/:itemId', (req, res) => {
+        // show item here
+    })
+
+    .put('/:itemId', (req, res) => {
+        // update item here
+    })
+
+    .delete('/:itemId', (req, res) => {
+        // delete item here
+    })
+
+
+
 // module.exports = ItemController
