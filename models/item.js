@@ -1,5 +1,6 @@
 const r = require('rethinkdb')
 const dbConfig = require('../dbConfig')
+const assert = require('assert')
 
 module.exports.getItems = (max_results, callback) => {
     onConnect((err, connection) => {
