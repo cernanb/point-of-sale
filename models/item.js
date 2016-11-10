@@ -10,12 +10,34 @@ module.exports.getItems = (max_results, callback) => {
                 callback(null, [])
                 connection.close()
             } else {
-                cursor.toArray((err, results) => {
+                cursor.toArray((err, result) => {
                     if (err) {
                         logerror("[ERROR][%s][getItems][toArray] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message);
                         callback(null, [])
                     } else {
-                        callback(null, results)
+                        callback(null, result)
+                    }
+                    connection.close()
+                })
+            }
+        })
+    })
+}
+
+module.exports.getItem = (itemId, callback) => {
+    onConnect((err, connection) => {
+        r.db(dbConfig.db).table('items').filter(r.row('id').eq(itemId)).run(connection, (err, cursor) => {
+            if (err) {
+                logerror("[ERROR][%s][getItem] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message);
+                callback(null, [])
+                connection.close()
+            } else {
+                cursor.toArray((err, result) => {
+                    if (err) {
+                        logerror("[ERROR][%s][getItem][toObject] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message)
+                        callback(null, {})
+                    } else {
+                        callback(null, result)
                     }
                     connection.close()
                 })
