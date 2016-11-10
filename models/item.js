@@ -26,22 +26,14 @@ module.exports.getItems = (max_results, callback) => {
 
 module.exports.getItem = (itemId, callback) => {
     onConnect((err, connection) => {
-        r.db(dbConfig.db).table('items').filter(r.row('id').eq(itemId)).run(connection, (err, cursor) => {
+        r.db(dbConfig.db).table('items').get(itemId).run(connection, (err, result) => {
             if (err) {
-                logerror("[ERROR][%s][getItem] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message);
-                callback(null, [])
-                connection.close()
+                logerror("[ERROR][%s][getItem][toObject] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message)
+                callback(null, {})
             } else {
-                cursor.toArray((err, result) => {
-                    if (err) {
-                        logerror("[ERROR][%s][getItem][toObject] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message)
-                        callback(null, {})
-                    } else {
-                        callback(null, result)
-                    }
-                    connection.close()
-                })
+                callback(null, result)
             }
+            connection.close()
         })
     })
 }
