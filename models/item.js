@@ -62,7 +62,21 @@ module.exports.updateItem = (itemId, itemInfo, callback) => {
     onConnect((err, connection) => {
         r.db(dbConfig.db).table('items').get(itemId).update({ name: item.name, updatedAt: item.updatedAt }).run(connection, (err, result) => {
             if (err) {
-                logerror("[ERROR][%s][getItem][toObject] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message)
+                logerror("[ERROR][%s][updateItem][toObject] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message)
+                callback(null, {})
+            } else {
+                callback(null, result)
+            }
+            connection.close()
+        })
+    })
+}
+
+module.exports.deleteItem = (itemId, callback) => {
+    onConnect((err, connection) => {
+        r.db(dbConfig.db).table('items').get(itemId).delete().run(connection, (err, result) => {
+            if (err) {
+                logerror("[ERROR][%s][deleteItem][toObject] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message)
                 callback(null, {})
             } else {
                 callback(null, result)
