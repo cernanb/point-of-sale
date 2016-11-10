@@ -31,7 +31,15 @@ module.exports = ItemController
     })
 
     .get('/:itemId', (req, res) => {
-        // show item here
+        Item.getItem(req.params.itemId, (err, response) => {
+            if (err) {
+                return res.json({
+                    responseCode: 1,
+                    error: err
+                })
+            }
+            res.json(response)
+        })
     })
 
     .put('/:itemId', (req, res) => {
