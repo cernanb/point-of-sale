@@ -39,7 +39,7 @@ module.exports.getItem = (itemId, callback) => {
 }
 
 module.exports.createItem = (itemInfo, callback) => {
-    const item = Object.assign({}, itemInfo, { createdAt: r.now() })
+    const item = Object.assign({}, itemInfo, { createdAt: r.now(), updatedAt: r.now() })
     onConnect((err, connection) => {
         r.db(dbConfig.db).table('items').insert(item).run(connection, (err, result) => {
             if (err) {
@@ -51,6 +51,21 @@ module.exports.createItem = (itemInfo, callback) => {
                 } else {
                     callback(null, false)
                 }
+            }
+            connection.close()
+        })
+    })
+}
+
+module.exports.updateItem = (itemId, itemInfo, callback) => {
+    const item = Object.assign({}, itemInfo, { updatedAt: r.now() })
+    onConnect((err, connection) => {
+        r.db(dbConfig.db).table('items').get(itemId).update({ name: item.name, updatedAt: item.updatedAt }).run(connection, (err, result) => {
+            if (err) {
+                logerror("[ERROR][%s][getItem][toObject] %s:%s\n%s", connection['_id'], err.name, err.msg, err.message)
+                callback(null, {})
+            } else {
+                callback(null, result)
             }
             connection.close()
         })

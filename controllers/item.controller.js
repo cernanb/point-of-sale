@@ -43,7 +43,15 @@ module.exports = ItemController
     })
 
     .put('/:itemId', (req, res) => {
-        // update item here
+        Item.updateItem(req.params.itemId, req.body, (err, response) => {
+            if (err) {
+                return res.json({
+                    responseCode: 1,
+                    error: err
+                })
+            }
+            res.json(response)
+        })
     })
 
     .delete('/:itemId', (req, res) => {
