@@ -1,9 +1,15 @@
+// Node Modules
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const http = require('http').Server(app)
+const bcrypt = require('bcrypt')
+const passport = require('passport')
+
+// App Modules
 const controllers = require('./controllers')
 const db = require('./models/db')
+
 
 db.setup()
 
